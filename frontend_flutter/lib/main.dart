@@ -37,42 +37,54 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text(greetings, //Text that will be displayed on the screen
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            Text(greetings2, //Text that will be displayed on the screen
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            Center(
-              child: Container(
-                //container that contains the button
-                width: 150,
-                height: 60,
-                child: FlatButton(
-                  color: Colors.blue,
-                  onPressed: () async {
-                    //async function to perform http get
-                    var url = Uri.parse('http://127.0.0.1:5000/');
-                    final response = await http.get(
-                        url); //getting the response from our backend server script
-
-                    final decoded = json.decode(response.body) as Map<String,
-                        dynamic>; //converting it from json to key value pair
-
-                    setState(() {
-                      greetings = decoded['greetings'];
-                      //changing the state of our widget on data update
-                    });
-                    setState(() {
-                      greetings2 = decoded['greetings2'];
-                      //changing the state of our widget on data update
-                    });
-                  },
-                  child: Text(
-                    'Press',
-                    style: TextStyle(
-                      fontSize: 24,
-                    ),
-                  ),
+            Container(
+              width: 500, // Specify width of the container
+              height: 200, // Specify height of the container
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('images/test.png'),
+                  fit: BoxFit.cover, // Adjust the image fit as per your requirement
                 ),
+              ),
+            ),
+            Text(
+              greetings,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              greetings2,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      var url = Uri.parse('http://127.0.0.1:5000/');
+                      final response = await http.get(url);
+
+                      final decoded =
+                          json.decode(response.body) as Map<String, dynamic>;
+
+                      setState(() {
+                        greetings = decoded['greetings'];
+                        greetings2 = decoded['greetings2'];
+                      });
+                    },
+                    child: Text('Get Data'),
+                  ),
+                  SizedBox(width: 20), // Changed to width for horizontal spacing
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        greetings = '';
+                        greetings2 = '';
+                      });
+                    },
+                    child: Text('Reset'),
+                  ),
+                ],
               ),
             ),
           ],
